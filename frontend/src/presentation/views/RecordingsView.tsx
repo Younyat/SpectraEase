@@ -71,8 +71,8 @@ export const RecordingsView: React.FC = () => {
                 isRecording
                   ? "bg-red-600 text-white hover:bg-red-700"
                   : "bg-green-600 text-white hover:bg-green-700"
-              )}
-            >
+            )}
+          >
               {isRecording ? <Square className="w-4 h-4 mr-2" /> : <Play className="w-4 h-4 mr-2" />}
               {isRecording ? 'Stop Recording' : 'Start Recording'}
             </button>

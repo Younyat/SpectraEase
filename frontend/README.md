@@ -1,4 +1,4 @@
-# Spectrum Lab Frontend
+﻿# Spectrum Lab Frontend
 
 React TypeScript frontend for the Spectrum Lab RF signal analyzer.
 
@@ -17,7 +17,6 @@ React TypeScript frontend for the Spectrum Lab RF signal analyzer.
 - **TypeScript** - Type safety
 - **Vite** - Build tool and dev server
 - **Tailwind CSS** - Styling
-- **Lucide React** - Icons
 - **Axios** - HTTP client
 - **Socket.IO** - Real-time communication
 
@@ -59,24 +58,24 @@ npm run preview
 
 ```
 src/
-├── app/                    # Application layer
-│   ├── App.tsx            # Main app component
-│   ├── router/            # React Router setup
-│   ├── services/          # API and WebSocket services
-│   ├── store/             # Zustand state management
-│   └── events/            # Event system
-├── domain/                 # Domain layer
-│   ├── models/            # Domain models
-│   └── valueObjects/      # Value objects
-├── presentation/           # Presentation layer
-│   ├── controllers/       # UI controllers
-│   ├── hooks/             # Custom React hooks
-│   └── views/             # React components
-└── shared/                 # Shared utilities
-    ├── constants/         # App constants
-    ├── types/             # TypeScript types
-    ├── utils/             # Utility functions
-    └── theme/             # Theme configuration
+ app/                    # Application layer
+    App.tsx            # Main app component
+    router/            # React Router setup
+    services/          # API and WebSocket services
+    store/             # Zustand state management
+    events/            # Event system
+ domain/                 # Domain layer
+    models/            # Domain models
+    valueObjects/      # Value objects
+ presentation/           # Presentation layer
+    controllers/       # UI controllers
+    hooks/             # Custom React hooks
+    views/             # React components
+ shared/                 # Shared utilities
+     constants/         # App constants
+     types/             # TypeScript types
+     utils/             # Utility functions
+     theme/             # Theme configuration
 ```
 
 ## Architecture
@@ -125,3 +124,6 @@ Communicates with the FastAPI backend via:
 - Responsive design with Tailwind CSS
 - TypeScript for type safety
 - ESLint for code quality
+
+
+

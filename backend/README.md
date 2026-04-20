@@ -1,4 +1,4 @@
-# README
+﻿# README
 # Spectrum Lab Backend
 
 Backend service for Spectrum Lab.
@@ -44,3 +44,5 @@ SUPPORTED_TRACE_MODES = ("clear_write", "average", "max_hold", "min_hold")
 SUPPORTED_DEMODULATION_MODES = ("off", "am", "fm", "wfm", "usb", "lsb", "cw")
 SUPPORTED_WINDOW_TYPES = ("rectangular", "hann", "hamming", "blackman")
 SUPPORTED_FILTER_TYPES = ("off", "low_pass", "high_pass", "band_pass", "band_stop", "notch")
+
+

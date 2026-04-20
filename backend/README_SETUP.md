@@ -1,4 +1,4 @@
-## **Spectrum Lab - Complete Setup Guide**
+﻿## **Spectrum Lab - Complete Setup Guide**
 
 ### Prerequisites
 - Python 3.10 or higher
@@ -10,7 +10,7 @@
 
 ---
 
-## **🚀 Quick Start (Backend + Frontend)**
+## **Quick Start (Backend + Frontend)**
 
 ### 1. **Clone and Setup Project**
 ```bash
@@ -52,7 +52,7 @@ npm run dev
 
 ---
 
-## **🔧 Backend Setup (Detailed)**
+## **Backend Setup (Detailed)**
 
 ### Prerequisites
 - Python 3.10 or higher
@@ -118,7 +118,7 @@ Edit `app/config/settings.py` to customize:
 
 ---
 
-## **🎨 Frontend Setup (Detailed)**
+## **Frontend Setup (Detailed)**
 
 ### Prerequisites
 - Node.js 18 or higher
@@ -172,71 +172,71 @@ The frontend is configured to connect to the backend automatically:
 ### Project Structure
 ```
 frontend/src/
-├── main.tsx                     # Application entry point
-├── app/                         # Application Layer
-│   ├── App.tsx                  # Main app component
-│   ├── router/                  # React Router configuration
-│   ├── services/                # API and WebSocket services
-│   ├── store/                   # Zustand global state
-│   └── events/                  # Event system
-├── domain/                      # Domain Layer
-│   ├── models/                  # Domain models
-│   └── valueObjects/            # Value objects
-├── presentation/                # Presentation Layer
-│   ├── controllers/             # UI controllers
-│   ├── hooks/                   # Custom hooks
-│   └── views/                   # React components
-└── shared/                      # Shared utilities
-    ├── types/                   # TypeScript types
-    ├── constants/               # Application constants
-    ├── utils/                   # Utility functions
-    └── theme/                   # UI theme configuration
+ main.tsx                     # Application entry point
+ app/                         # Application Layer
+    App.tsx                  # Main app component
+    router/                  # React Router configuration
+    services/                # API and WebSocket services
+    store/                   # Zustand global state
+    events/                  # Event system
+ domain/                      # Domain Layer
+    models/                  # Domain models
+    valueObjects/            # Value objects
+ presentation/                # Presentation Layer
+    controllers/             # UI controllers
+    hooks/                   # Custom hooks
+    views/                   # React components
+ shared/                      # Shared utilities
+     types/                   # TypeScript types
+     constants/               # Application constants
+     utils/                   # Utility functions
+     theme/                   # UI theme configuration
 ```
 
 ---
 
-## **🏗️ Project Architecture**
+## **Project Architecture**
 
 ### Clean Architecture Overview
 ```
 Presentation Layer (React Components)
-         ↕
+         
 Application Layer (Controllers, Hooks, Store)
-         ↕
+         
 Domain Layer (Models, Value Objects)
-         ↕
+         
 Infrastructure (API, WebSocket, DSP, Devices)
 ```
 
 ### Backend Structure
 ```
 app/
-├── main.py                      # FastAPI application entry
-├── config/
-│   ├── settings.py             # Configuration
-│   ├── constants.py            # Global constants
-│   └── logging_config.py       # Logging setup
-├── domain/                      # Clean Architecture Domain Layer
-│   ├── entities/               # Business entities
-│   ├── value_objects/          # Value objects
-│   ├── services/               # Domain services
-│   └── repositories/           # Repository interfaces
-├── application/                 # Application Layer (Use Cases)
-│   ├── use_cases/              # Business logic orchestration
-│   ├── dto/                    # Data Transfer Objects
-│   └── interfaces/             # Abstract providers
-├── infrastructure/             # Infrastructure Layer
-│   ├── devices/                # Device adapters (UHD, RTL-SDR, Mock)
-│   ├── dsp/                    # DSP modules (FFT, filters, demod)
-│   ├── persistence/            # Data repositories (JSON-based)
-│   ├── web/                    # Web layer (FastAPI routes, controllers)
-│   └── di/                     # Dependency Injection container
-└── tests/                       # Unit, integration, E2E tests
+ main.py                      # FastAPI application entry
+ config/
+    settings.py             # Configuration
+    constants.py            # Global constants
+    logging_config.py       # Logging setup
+ domain/                      # Clean Architecture Domain Layer
+    entities/               # Business entities
+    value_objects/          # Value objects
+    services/               # Domain services
+    repositories/           # Repository interfaces
+ application/                 # Application Layer (Use Cases)
+    use_cases/              # Business logic orchestration
+    dto/                    # Data Transfer Objects
+    interfaces/             # Abstract providers
+ infrastructure/             # Infrastructure Layer
+    devices/                # Device adapters (UHD, RTL-SDR, Mock)
+    dsp/                    # DSP modules (FFT, filters, demod)
+    persistence/            # Data repositories (JSON-based)
+    web/                    # Web layer (FastAPI routes, controllers)
+    di/                     # Dependency Injection container
+ tests/                       # Unit, integration, E2E tests
 ```
 
 ---
 
-## **🔌 API Integration**
+## **API Integration**
 
 ### REST Endpoints
 
@@ -277,7 +277,7 @@ app/
 
 ---
 
-## **🧪 Testing**
+## **Testing**
 
 ### Backend Tests
 ```bash
@@ -303,7 +303,7 @@ npm test
 
 ---
 
-## **🐳 Docker Setup**
+## **Docker Setup**
 
 ### Full Stack with Docker Compose
 ```bash
@@ -326,7 +326,7 @@ docker run -p 5173:5173 spectrum-lab-frontend
 
 ---
 
-## **🔧 Troubleshooting**
+## **Troubleshooting**
 
 ### Backend Issues
 
@@ -370,7 +370,7 @@ docker run -p 5173:5173 spectrum-lab-frontend
 
 ---
 
-## **📚 Development Workflow**
+## **Development Workflow**
 
 ### Starting Development
 1. Run `./scripts/init_project.sh` for initial setup
@@ -392,7 +392,7 @@ docker run -p 5173:5173 spectrum-lab-frontend
 
 ---
 
-## **🚀 Deployment**
+## **Deployment**
 
 ### Production Backend
 ```bash
@@ -415,7 +415,7 @@ Create `.env` files for configuration:
 
 ---
 
-## **📖 Additional Resources**
+## **Additional Resources**
 
 - **API Documentation**: http://localhost:8000/docs (when backend is running)
 - **Frontend Storybook**: `npm run storybook` (when implemented)
@@ -424,7 +424,7 @@ Create `.env` files for configuration:
 
 ---
 
-## **🎯 Quick Commands Reference**
+## **Quick Commands Reference**
 
 ```bash
 # Full setup
@@ -456,3 +456,6 @@ cd frontend && npm run dev
 
 ## **License**
 See LICENSE file in project root.
+
+
+

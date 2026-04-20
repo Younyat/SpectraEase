@@ -1,8 +1,8 @@
-# **Spectrum Lab** - RF Signal Analyzer
+﻿# **Spectrum Lab** - RF Signal Analyzer
 
 Advanced RF spectrum analyzer with real-time visualization, signal demodulation, and recording capabilities. Built with Python (FastAPI) backend and React (TypeScript) frontend using Clean Architecture.
 
-## ✨ Features
+## Features
 
 ### Core Analysis
 - **Live Spectrum** - Real-time FFT-based spectrum analysis
@@ -35,21 +35,21 @@ Advanced RF spectrum analyzer with real-time visualization, signal demodulation,
 - **Configurable Colormaps** - Turbo, Viridis, Plasma, Inferno
 - **Real-time Updates** - WebSocket streaming
 
-## 🏗️ Architecture
+## Architecture
 
 **Clean Architecture** + **SOLID Principles**
 
 ```
 Presentation (React/TypeScript)
-         ↕
+         
 Application Layer (Use Cases, DTOs)
-         ↕
+         
 Domain Layer (Entities, Services)
-         ↕
+         
 Infrastructure (Devices, DSP, Persistence)
 ```
 
-## 📦 Tech Stack
+## Tech Stack
 
 | Component | Technology |
 |-----------|-----------|
@@ -60,7 +60,7 @@ Infrastructure (Devices, DSP, Persistence)
 | **Storage** | JSON (extensible to SQL) |
 | **Streaming** | WebSockets |
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Python 3.10+
@@ -93,7 +93,7 @@ npm run dev
 ```
 **App**: `http://localhost:5173`
 
-## 📖 Usage
+## Usage
 
 ### Basic Operation
 1. Start both backend and frontend
@@ -115,7 +115,7 @@ npm run dev
 2. Select demodulation mode (AM, FM, WFM, SSB)
 3. Start demodulation to hear audio
 
-## 🔧 Configuration
+## Configuration
 
 Edit `backend/app/config/settings.py`:
 ```python
@@ -124,29 +124,29 @@ default_spectrum.fft_size = 4096
 default_spectrum.detector_mode = "sample"
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 spectrum-lab/
-├── backend/                 # FastAPI backend
-│   ├── app/
-│   │   ├── config/         # Settings, constants
-│   │   ├── domain/         # Entities, services
-│   │   ├── application/    # Use cases, DTOs
-│   │   └── infrastructure/ # Devices, DSP, web
-│   └── requirements.txt
-├── frontend/                # React frontend
-│   ├── src/
-│   │   ├── app/            # State, services, router
-│   │   ├── domain/         # Models, value objects
-│   │   ├── presentation/   # Components, hooks
-│   │   └── shared/         # Utils, types, theme
-│   └── package.json
-└── scripts/
-    └── init_project.sh     # Automated setup
+ backend/                 # FastAPI backend
+    app/
+       config/         # Settings, constants
+       domain/         # Entities, services
+       application/    # Use cases, DTOs
+       infrastructure/ # Devices, DSP, web
+    requirements.txt
+ frontend/                # React frontend
+    src/
+       app/            # State, services, router
+       domain/         # Models, value objects
+       presentation/   # Components, hooks
+       shared/         # Utils, types, theme
+    package.json
+ scripts/
+     init_project.sh     # Automated setup
 ```
 
-## 🎯 Key Features
+## Key Features
 
 ### Real-time Performance
 - 10 FPS spectrum updates
@@ -172,7 +172,7 @@ spectrum-lab/
 - Session organization
 - Metadata storage
 
-## 🔌 API Reference
+## API Reference
 
 ### REST Endpoints
 - `GET /api/device/status` - Device connection status
@@ -188,7 +188,7 @@ spectrum-lab/
 
 Full API documentation at `http://localhost:8000/docs`
 
-## 🛠️ Development
+## Development
 
 ### Backend Development
 ```bash
@@ -212,13 +212,13 @@ cd backend && python -m pytest
 cd frontend && npm test
 ```
 
-## 📚 Documentation
+## Documentation
 
 - [Backend Setup Guide](backend/README_SETUP.md)
 - [API Documentation](http://localhost:8000/docs)
 - [Architecture Overview](docs/architecture/)
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -226,17 +226,17 @@ cd frontend && npm test
 4. Add tests if applicable
 5. Submit a pull request
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Built with FastAPI, React, and modern web technologies
 - SDR support via UHD and pyrtlsdr libraries
 - Signal processing powered by NumPy and SciPy
 
-## 🔧 Configuration
+## Configuration
 
 Edit `backend/app/config/settings.py`:
 ```python
@@ -245,14 +245,14 @@ default_spectrum.fft_size = 4096
 default_spectrum.detector_mode = "sample"
 ```
 
-## 📋 Development Roadmap
+## Development Roadmap
 
-- ✅ Phase 1: Core analyzer, spectrum, waterfall, markers, IQ recording
-- 🔄 Phase 2: Demodulation (AM/FM/WFM), audio, filters
-- ⏳ Phase 3: Advanced measurements, RBW/VBW, peak detection
-- ⏳ Phase 4: Multi-trace, max/min hold, offline playback
+- Phase 1: Core analyzer, spectrum, waterfall, markers, IQ recording
+- Phase 2: Demodulation (AM/FM/WFM), audio, filters
+- Phase 3: Advanced measurements, RBW/VBW, peak detection
+- Phase 4: Multi-trace, max/min hold, offline playback
 
-## 🧪 Testing
+## Testing
 
 ```bash
 cd backend
@@ -260,29 +260,29 @@ pytest tests/  # Unit tests
 pytest --cov  # With coverage
 ```
 
-## 📚 Documentation
+## Documentation
 
 - [Architecture](docs/architecture/) - Design details
 - [API Reference](backend/README_SETUP.md#api-endpoints) - REST endpoints
 - [Troubleshooting](backend/README_SETUP.md#troubleshooting) - Common issues
 
-## 🤝 Contributing
+## Contributing
 
 1. Follow Clean Architecture
 2. Add tests for features
 3. Update documentation
 4. Submit PR
 
-## 📄 License
+## License
 
 MIT License
 
-## ❓ Support
+## Support
 
-- 📖 Read [docs/architecture/system_overview.md](docs/architecture/system_overview.md)
-- 🐛 Check existing issues
-- 💬 Open a discussion
+- Read [docs/architecture/system_overview.md](docs/architecture/system_overview.md)
+- Check existing issues
+- Open a discussion
 
----
+--- **Spectrum Lab** v0.1.0 - Professional RF Analysis Tool
 
-**Spectrum Lab** v0.1.0 - Professional RF Analysis Tool
+

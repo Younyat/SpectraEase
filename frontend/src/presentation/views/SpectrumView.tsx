@@ -248,14 +248,14 @@ export const SpectrumView: React.FC = () => {
             className="h-9 inline-flex items-center gap-1.5 rounded-md bg-cyan-700 px-3 text-sm font-semibold text-white hover:bg-cyan-600"
           >
             <ChevronLeft className="w-5 h-5" />
-            Spectrum
+            Spectrum Left
           </button>
           <button
             onClick={() => panFrequencyWindow(1)}
             title="Desplazar espectro hacia la derecha"
             className="h-9 inline-flex items-center gap-1.5 rounded-md bg-cyan-700 px-3 text-sm font-semibold text-white hover:bg-cyan-600"
           >
-            Spectrum
+            Spectrum Right
             <ChevronRight className="w-5 h-5" />
           </button>
 
@@ -281,7 +281,8 @@ export const SpectrumView: React.FC = () => {
           </label>
           <LabeledInput label="Avg" value={averaging} onChange={setAveraging} onEnter={applyResolution} compact />
           <button onClick={applyResolution} className="h-9 px-3 rounded-md bg-slate-700 hover:bg-slate-600 text-sm">
-            <SlidersHorizontal className="w-4 h-4" />
+            <SlidersHorizontal className="w-4 h-4 mr-2 inline-block" />
+            Apply Trace
           </button>
 
           <LabeledInput label="Gain dB" value={gainDb} onChange={setGainDb} onEnter={applyGain} compact />
@@ -298,7 +299,8 @@ export const SpectrumView: React.FC = () => {
             onClick={() => markerController.clearAllMarkers()}
             className="h-9 flex items-center px-3 rounded-md bg-slate-700 hover:bg-slate-600 text-sm"
           >
-            <Trash2 className="w-4 h-4" />
+            <Trash2 className="w-4 h-4 mr-2" />
+            Clear
           </button>
         </div>
         {controlError && <div className="mt-2 text-sm text-red-300">{controlError}</div>}
@@ -314,7 +316,7 @@ export const SpectrumView: React.FC = () => {
               className="h-9 inline-flex items-center gap-1.5 rounded-md bg-cyan-700 px-3 text-sm font-semibold text-white hover:bg-cyan-600"
             >
               <ChevronLeft className="w-5 h-5" />
-              Left
+              Spectrum Left
             </button>
             <LabeledInput label="Step MHz" value={panStepMHz} onChange={setPanStepMHz} onEnter={() => undefined} compact />
             <button
@@ -322,7 +324,7 @@ export const SpectrumView: React.FC = () => {
               title="Desplazar espectro hacia la derecha"
               className="h-9 inline-flex items-center gap-1.5 rounded-md bg-cyan-700 px-3 text-sm font-semibold text-white hover:bg-cyan-600"
             >
-              Right
+              Spectrum Right
               <ChevronRight className="w-5 h-5" />
             </button>
           </div>
