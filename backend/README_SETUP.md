@@ -79,6 +79,24 @@ Startup defaults are read from environment variables:
 
 The frontend can change most analyzer parameters at runtime. Environment variables are only startup defaults.
 
+## RF Safety
+
+The backend validates frequency, start/stop, span/sample-rate, gain, RBW, and VBW before applying them to the USRP-B200. Default software guardrails:
+
+- Center frequency: `70 MHz` to `6 GHz`
+- Sample rate/span: `200 kS/s` to `10 MS/s`
+- Gain: `0 dB` to `60 dB`
+- RBW: `1 Hz` to `1 MHz`
+- VBW: `1 Hz` to `1 MHz`
+
+The current limits are available at:
+
+```text
+GET /api/spectrum/safety-limits
+```
+
+These limits prevent accidental invalid settings from reaching UHD. They cannot protect the RF input from excessive external signal power; use attenuators or RF protection when needed.
+
 ## API Endpoints
 
 ### Device

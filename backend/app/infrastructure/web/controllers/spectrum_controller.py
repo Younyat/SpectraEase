@@ -1,6 +1,16 @@
 from __future__ import annotations
 
 from app.infrastructure.sdr.real_spectrum_stream import real_spectrum_stream
+from app.infrastructure.sdr.rf_safety import (
+    safety_status,
+    validate_center_frequency,
+    validate_frequency_window,
+    validate_gain,
+    validate_rbw,
+    validate_span,
+    validate_start_stop,
+    validate_vbw,
+)
 
 
 class SpectrumController:
@@ -32,17 +42,19 @@ class SpectrumController:
         active_settings = settings or self._settings
         return real_spectrum_stream.get_latest(active_settings)
 
+    def get_safety_limits(self) -> dict:
+        return safety_status()
+
     def set_span(self, span_hz: float) -> dict:
-        if span_hz <= 0:
-            raise ValueError("span_hz must be > 0")
+        validate_frequency_window(self._settings.frequency.center_frequency_hz, span_hz)
         self._settings.set_span(span_hz)
         self._settings.set_sample_rate(span_hz)
         real_spectrum_stream.stop()
         return {"status": "ok", "span_hz": span_hz}
 
     def set_center_frequency(self, frequency_hz: float) -> dict:
-        if frequency_hz <= 0:
-            raise ValueError("center_frequency_hz must be > 0")
+        validate_center_frequency(frequency_hz)
+        validate_frequency_window(frequency_hz, self._settings.frequency.span_hz)
         self._settings.set_center_frequency(frequency_hz)
         real_spectrum_stream.stop()
         return {
@@ -53,13 +65,7 @@ class SpectrumController:
         }
 
     def set_start_stop(self, start_frequency_hz: float, stop_frequency_hz: float) -> dict:
-        if start_frequency_hz <= 0:
-            raise ValueError("start_frequency_hz must be > 0")
-        if stop_frequency_hz <= start_frequency_hz:
-            raise ValueError("stop_frequency_hz must be greater than start_frequency_hz")
-
-        span_hz = stop_frequency_hz - start_frequency_hz
-        center_frequency_hz = start_frequency_hz + span_hz / 2.0
+        center_frequency_hz, span_hz = validate_start_stop(start_frequency_hz, stop_frequency_hz)
         self._settings.set_center_frequency(center_frequency_hz)
         self._settings.set_span(span_hz)
         self._settings.set_sample_rate(span_hz)
@@ -73,10 +79,12 @@ class SpectrumController:
         }
 
     def set_rbw(self, rbw_hz: float) -> dict:
+        validate_rbw(rbw_hz)
         self._settings.set_rbw(rbw_hz)
         return {"status": "ok", "rbw_hz": rbw_hz}
 
     def set_vbw(self, vbw_hz: float) -> dict:
+        validate_vbw(vbw_hz)
         self._settings.set_vbw(vbw_hz)
         return {"status": "ok", "vbw_hz": vbw_hz}
 
@@ -102,3 +110,9 @@ class SpectrumController:
                 raise ValueError("averaging_factor must be > 0")
             self._settings.trace.averaging_factor = averaging_factor
         return {"status": "ok", "averaging_enabled": enabled, "averaging_factor": averaging_factor}
+
+    def validate_gain(self, gain_db: float) -> None:
+        validate_gain(gain_db)
+
+    def validate_sample_rate(self, sample_rate_hz: float) -> None:
+        validate_span(sample_rate_hz)

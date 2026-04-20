@@ -144,9 +144,3 @@ export const API_ENDPOINTS = {
   SESSIONS_CREATE: '/api/sessions/',
 } as const;
 
-// WebSocket Events
-export const WS_EVENTS = {
-  SPECTRUM_UPDATE: 'spectrum_update',
-  WATERFALL_UPDATE: 'waterfall_update',
-  DEVICE_STATUS: 'device_status',
-} as const;

@@ -18,6 +18,14 @@ const formatInput = (value: number, digits = 6) => {
   return Number(value.toFixed(digits)).toString();
 };
 
+const getErrorMessage = (error: unknown) => {
+  if (typeof error === 'object' && error !== null && 'response' in error) {
+    const response = (error as { response?: { data?: { detail?: string } } }).response;
+    if (response?.data?.detail) return response.data.detail;
+  }
+  return error instanceof Error ? error.message : 'Operation failed';
+};
+
 export const SpectrumView: React.FC = () => {
   const { canvasRef } = useSpectrum();
   const spectrumData = useSpectrumData();
@@ -92,8 +100,12 @@ export const SpectrumView: React.FC = () => {
       return;
     }
     setControlError(null);
-    await spectrumController.setCenterFrequency(center);
-    await spectrumController.setSpan(span);
+    try {
+      await spectrumController.setCenterFrequency(center);
+      await spectrumController.setSpan(span);
+    } catch (error) {
+      setControlError(getErrorMessage(error));
+    }
   };
 
   const applyStartStop = async () => {
@@ -104,7 +116,11 @@ export const SpectrumView: React.FC = () => {
       return;
     }
     setControlError(null);
-    await spectrumController.setStartStop(start, stop);
+    try {
+      await spectrumController.setStartStop(start, stop);
+    } catch (error) {
+      setControlError(getErrorMessage(error));
+    }
   };
 
   const panFrequencyWindow = async (direction: -1 | 1) => {
@@ -121,8 +137,12 @@ export const SpectrumView: React.FC = () => {
     }
 
     setControlError(null);
-    await spectrumController.setCenterFrequency(nextCenter);
-    await spectrumController.refreshSpectrum();
+    try {
+      await spectrumController.setCenterFrequency(nextCenter);
+      await spectrumController.refreshSpectrum();
+    } catch (error) {
+      setControlError(getErrorMessage(error));
+    }
   };
 
   const applyResolution = async () => {
@@ -142,12 +162,16 @@ export const SpectrumView: React.FC = () => {
       return;
     }
     setControlError(null);
-    await spectrumController.setRbw(rbw);
-    await spectrumController.setVbw(vbw);
-    await spectrumController.setReferenceLevel(ref);
-    await spectrumController.setNoiseFloorOffset(offset);
-    await spectrumController.setDetectorMode(detectorMode);
-    await spectrumController.setAveraging(avg);
+    try {
+      await spectrumController.setRbw(rbw);
+      await spectrumController.setVbw(vbw);
+      await spectrumController.setReferenceLevel(ref);
+      await spectrumController.setNoiseFloorOffset(offset);
+      await spectrumController.setDetectorMode(detectorMode);
+      await spectrumController.setAveraging(avg);
+    } catch (error) {
+      setControlError(getErrorMessage(error));
+    }
   };
 
   const applyGain = async () => {
@@ -157,26 +181,46 @@ export const SpectrumView: React.FC = () => {
       return;
     }
     setControlError(null);
-    await spectrumController.setGain(gain);
+    try {
+      await spectrumController.setGain(gain);
+    } catch (error) {
+      setControlError(getErrorMessage(error));
+    }
   };
 
   const handleStartStop = async () => {
     if (isStreaming) {
-      await spectrumController.stopDeviceStream();
-      setIsStreaming(false);
+      try {
+        await spectrumController.stopDeviceStream();
+        setIsStreaming(false);
+      } catch (error) {
+        setControlError(getErrorMessage(error));
+      }
       return;
     }
-    await spectrumController.startDeviceStream();
-    setIsStreaming(true);
+    try {
+      await spectrumController.startDeviceStream();
+      setIsStreaming(true);
+    } catch (error) {
+      setControlError(getErrorMessage(error));
+    }
   };
 
   const handleConnectDisconnect = async () => {
     if (deviceStatus.isConnected) {
-      await spectrumController.disconnectDevice();
-      setIsStreaming(false);
+      try {
+        await spectrumController.disconnectDevice();
+        setIsStreaming(false);
+      } catch (error) {
+        setControlError(getErrorMessage(error));
+      }
       return;
     }
-    await spectrumController.connectDevice();
+    try {
+      await spectrumController.connectDevice();
+    } catch (error) {
+      setControlError(getErrorMessage(error));
+    }
   };
 
   const addMarkerAtCanvas = async (event: React.MouseEvent<HTMLCanvasElement>) => {

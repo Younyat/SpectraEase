@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from app.config.settings import settings as app_settings
+from app.infrastructure.sdr.rf_safety import validate_frequency_window, validate_gain
 
 
 class RealSpectrumStream:
@@ -43,6 +44,16 @@ class RealSpectrumStream:
         self._config_key = config_key
         self._latest_frame = None
         self._last_error = None
+
+        try:
+            validate_frequency_window(
+                analyzer_settings.frequency.center_frequency_hz,
+                analyzer_settings.frequency.sample_rate_hz,
+            )
+            validate_gain(analyzer_settings.gain.gain_db)
+        except ValueError as exc:
+            self._last_error = str(exc)
+            return
 
         python_exe = os.environ.get("RADIOCONDA_PYTHON", r"C:\Users\Usuario\radioconda\python.exe")
         backend_root = app_settings.storage.app_root.parent

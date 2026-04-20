@@ -94,6 +94,26 @@ OpenAPI docs are available at `http://localhost:8000/docs` when the backend is r
 | `UHD_DEVICE_ARGS` | Optional UHD device selector |
 | `REAL_SDR_FPS` | Spectrum worker frame rate |
 
+## RF Safety Guardrails
+
+The backend rejects unsafe or invalid hardware-facing settings before they reach UHD:
+
+| Parameter | Default software range |
+|-----------|------------------------|
+| Center frequency | `70 MHz` to `6 GHz` |
+| Sample rate / span | `200 kS/s` to `10 MS/s` |
+| Gain | `0 dB` to `60 dB` |
+| RBW | `1 Hz` to `1 MHz` |
+| VBW | `1 Hz` to `1 MHz` |
+
+The safety status is also exposed through:
+
+```text
+GET /api/spectrum/safety-limits
+```
+
+These checks reduce accidental misconfiguration. They do not replace RF input protection; avoid injecting high-power signals directly into the USRP-B200 input.
+
 ## Troubleshooting
 
 - Confirm the USRP-B200 is connected over USB.

@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 
 from fastapi import FastAPI
-from fastapi import WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config.settings import settings
@@ -60,9 +59,3 @@ def root() -> dict:
         "version": settings.app.app_version,
         "status": "ok",
     }
-
-
-@app.websocket("/socket.io/")
-async def legacy_socket_io_sink(websocket: WebSocket) -> None:
-    await websocket.accept()
-    await websocket.close(code=1000)

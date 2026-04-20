@@ -53,6 +53,10 @@ def build_spectrum_router(controller) -> APIRouter:
     async def get_live_spectrum():
         return controller.get_spectrum(None)
 
+    @router.get("/safety-limits")
+    async def get_safety_limits():
+        return controller.get_safety_limits()
+
     @router.post("/center-frequency")
     async def set_center_frequency(body: SetCenterBody):
         frequency_hz = body.center_frequency_hz if body.center_frequency_hz is not None else body.frequency_hz
@@ -106,7 +110,10 @@ def build_spectrum_router(controller) -> APIRouter:
         offset = body.noise_floor_offset_db if body.noise_floor_offset_db is not None else body.offset_db
         if offset is None:
             raise HTTPException(status_code=400, detail="noise_floor_offset_db or offset_db is required")
-        return controller.set_noise_floor_offset(offset)
+        try:
+            return controller.set_noise_floor_offset(offset)
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
 
     @router.post("/detector-mode")
     async def set_detector_mode(body: SetDetectorBody):
@@ -122,6 +129,9 @@ def build_spectrum_router(controller) -> APIRouter:
     async def set_averaging(body: SetAveragingBody):
         factor = body.averaging_factor if body.averaging_factor is not None else body.count
         enabled = body.enabled if body.enabled is not None else bool(factor and factor > 1)
-        return controller.set_averaging(enabled, factor)
+        try:
+            return controller.set_averaging(enabled, factor)
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
     
     return router

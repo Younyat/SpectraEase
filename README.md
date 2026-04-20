@@ -84,6 +84,22 @@ Then open:
 
 The frontend can change the active analyzer settings at runtime. These variables only define startup defaults.
 
+## RF Safety Guardrails
+
+The backend validates hardware-facing parameters before opening or retuning the USRP-B200:
+
+| Limit | Default |
+|-------|---------|
+| Center frequency | `70 MHz` to `6 GHz` |
+| Sample rate / span | `200 kS/s` to `10 MS/s` |
+| Gain | `0 dB` to `60 dB` |
+| RBW | `1 Hz` to `1 MHz` |
+| VBW | `1 Hz` to `1 MHz` |
+
+These are conservative software limits for this project, not the full theoretical device capability. They can be overridden with `RF_MIN_CENTER_FREQUENCY_HZ`, `RF_MAX_CENTER_FREQUENCY_HZ`, `RF_MIN_SAMPLE_RATE_HZ`, `RF_MAX_SAMPLE_RATE_HZ`, `RF_MAX_SPAN_HZ`, `RF_MIN_GAIN_DB`, and `RF_MAX_GAIN_DB`.
+
+Software limits do not protect the RF input from excessive external power. Use appropriate antennas, attenuators, and RF front-end protection when connecting unknown signals.
+
 ## Project Structure
 
 ```text

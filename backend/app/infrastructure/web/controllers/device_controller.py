@@ -6,6 +6,13 @@ from datetime import datetime, timezone
 
 from app.config.settings import settings as app_settings
 from app.infrastructure.sdr.real_spectrum_stream import real_spectrum_stream
+from app.infrastructure.sdr.rf_safety import (
+    safety_status,
+    validate_center_frequency,
+    validate_frequency_window,
+    validate_gain,
+    validate_span,
+)
 
 
 class DeviceController:
@@ -33,6 +40,16 @@ class DeviceController:
     def connect_device(self) -> dict:
         driver = self._driver_name()
         self._last_error = None
+        try:
+            validate_frequency_window(
+                self._settings.frequency.center_frequency_hz,
+                self._settings.frequency.sample_rate_hz,
+            )
+            validate_gain(self._settings.gain.gain_db)
+        except ValueError as exc:
+            self._is_connected = False
+            self._last_error = str(exc)
+            return self.get_device_status()
 
         python_exe = os.environ.get("RADIOCONDA_PYTHON", r"C:\Users\Usuario\radioconda\python.exe")
         backend_root = app_settings.storage.app_root.parent
@@ -99,6 +116,13 @@ class DeviceController:
         return self.get_device_status()
 
     def open_wfm_receiver(self) -> dict:
+        try:
+            validate_center_frequency(self._settings.frequency.center_frequency_hz)
+            validate_gain(self._settings.gain.gain_db)
+        except ValueError as exc:
+            self._last_error = str(exc)
+            return self.get_device_status()
+
         python_exe = os.environ.get("RADIOCONDA_PYTHON", r"C:\Users\Usuario\radioconda\python.exe")
         backend_root = app_settings.storage.app_root.parent
         script_path = backend_root / "tools" / "wfm_receiver_qt.py"
@@ -139,6 +163,17 @@ class DeviceController:
         return self.get_device_status()
 
     def start_streaming(self) -> dict:
+        try:
+            validate_frequency_window(
+                self._settings.frequency.center_frequency_hz,
+                self._settings.frequency.sample_rate_hz,
+            )
+            validate_gain(self._settings.gain.gain_db)
+        except ValueError as exc:
+            self._is_streaming = False
+            self._last_error = str(exc)
+            return self.get_device_status()
+
         if not self._is_connected:
             self.connect_device()
         self._is_streaming = self._is_connected
@@ -155,6 +190,8 @@ class DeviceController:
             return self.get_device_status()
 
     def set_frequency(self, frequency_hz: float) -> dict:
+        validate_center_frequency(frequency_hz)
+        validate_frequency_window(frequency_hz, self._settings.frequency.span_hz)
         self._settings.set_center_frequency(frequency_hz)
         try:
             return self._set_center_frequency_use_case.execute(frequency_hz)
@@ -162,6 +199,7 @@ class DeviceController:
             return {"status": "ok", "center_frequency_hz": frequency_hz}
 
     def set_gain(self, gain_db: float) -> dict:
+        validate_gain(gain_db)
         self._settings.set_gain(gain_db)
         try:
             return self._set_gain_use_case.execute(gain_db)
@@ -169,6 +207,8 @@ class DeviceController:
             return {"status": "ok", "gain_db": gain_db}
 
     def set_sample_rate(self, sample_rate_hz: float) -> dict:
+        validate_span(sample_rate_hz)
+        validate_frequency_window(self._settings.frequency.center_frequency_hz, sample_rate_hz)
         self._settings.set_sample_rate(sample_rate_hz)
         try:
             return self._set_sample_rate_use_case.execute(sample_rate_hz)
@@ -186,6 +226,7 @@ class DeviceController:
             "is_streaming": self._is_streaming,
             "last_error": self._last_error,
             "device_info": self._device_info,
+            "safety_limits": safety_status(),
             "updated_at_utc": datetime.now(timezone.utc).isoformat(),
         }
 

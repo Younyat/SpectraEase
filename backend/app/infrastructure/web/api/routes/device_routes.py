@@ -1,5 +1,5 @@
 from __future__ import annotations
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 
@@ -52,21 +52,30 @@ def build_device_router(controller) -> APIRouter:
     async def set_frequency(body: SetFrequencyBody):
         frequency_hz = body.frequency_hz if body.frequency_hz is not None else body.frequency
         if frequency_hz is None:
-            raise ValueError("frequency_hz or frequency is required")
-        return controller.set_frequency(frequency_hz)
+            raise HTTPException(status_code=400, detail="frequency_hz or frequency is required")
+        try:
+            return controller.set_frequency(frequency_hz)
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
     
     @router.post("/gain")
     async def set_gain(body: SetGainBody):
         gain_db = body.gain_db if body.gain_db is not None else body.gain
         if gain_db is None:
-            raise ValueError("gain_db or gain is required")
-        return controller.set_gain(gain_db)
+            raise HTTPException(status_code=400, detail="gain_db or gain is required")
+        try:
+            return controller.set_gain(gain_db)
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
 
     @router.post("/sample-rate")
     async def set_sample_rate(body: SetSampleRateBody):
         sample_rate_hz = body.sample_rate_hz if body.sample_rate_hz is not None else body.sample_rate
         if sample_rate_hz is None:
-            raise ValueError("sample_rate_hz or sample_rate is required")
-        return controller.set_sample_rate(sample_rate_hz)
+            raise HTTPException(status_code=400, detail="sample_rate_hz or sample_rate is required")
+        try:
+            return controller.set_sample_rate(sample_rate_hz)
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
     
     return router

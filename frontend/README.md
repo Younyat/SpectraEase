@@ -73,6 +73,10 @@ powershell -ExecutionPolicy Bypass -File .\scripts\run_dev.ps1 -UseRealSdr 1 -Ra
 5. Click the trace to create a marker.
 6. Use `Peak` to mark the strongest visible signal.
 
+## Safety Feedback
+
+The backend enforces safety limits before applying settings to the USRP-B200. If a value is outside the configured range, the request fails with `400 Bad Request` and the UI shows the backend error instead of applying the setting.
+
 ## Project Structure
 
 ```text
