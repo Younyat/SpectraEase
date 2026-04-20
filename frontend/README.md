@@ -1,129 +1,101 @@
-﻿# Spectrum Lab Frontend
+# SpectraEase Frontend
 
-React TypeScript frontend for the Spectrum Lab RF signal analyzer.
+React/TypeScript frontend for SpectraEase, a real SDR spectrum analyzer currently used with an **Ettus Research USRP-B200**.
+
+The frontend controls the FastAPI backend and displays live RF spectrum frames captured from the real device through UHD/GNU Radio. It does not rely on mock spectrum data in the active application flow.
 
 ## Features
 
-- **Real-time Spectrum Display** - Canvas-based spectrum visualization
-- **Waterfall Display** - Time-frequency representation
-- **Interactive Markers** - Peak detection and frequency markers
-- **Recording Management** - IQ and audio recording controls
-- **Device Control** - Start/stop streaming, frequency/gain adjustment
-- **Settings Panel** - Comprehensive analyzer configuration
+- Live spectrum canvas
+- Device connect/disconnect and start/stop controls
+- Center/span tuning
+- Start/stop frequency tuning
+- Spectrum pan buttons: `Spectrum Left` and `Spectrum Right`
+- Configurable pan step in MHz
+- RBW, VBW, reference level, noise offset, detector mode, averaging, and gain controls
+- Marker placement by clicking the trace
+- Marker table with frequency and signal level
+- Peak marker button
+- Device status panel
+- Recording/session screens
 
 ## Tech Stack
 
-- **React 18** - UI framework
-- **TypeScript** - Type safety
-- **Vite** - Build tool and dev server
-- **Tailwind CSS** - Styling
-- **Axios** - HTTP client
-- **Socket.IO** - Real-time communication
+- React 18
+- TypeScript
+- Vite
+- Tailwind CSS
+- Zustand
+- Axios
+- Lucide React
 
-## Getting Started
+## Development
 
-### Prerequisites
-
-- Node.js 18+
-- npm or yarn
-
-### Installation
+Install dependencies:
 
 ```bash
 cd frontend
 npm install
 ```
 
-### Development
+Run the frontend:
 
 ```bash
 npm run dev
 ```
 
-The development server will start on `http://localhost:5173`
+The frontend runs at:
 
-### Build
-
-```bash
-npm run build
+```text
+http://localhost:5173
 ```
 
-### Preview Production Build
+The backend must be running at:
 
-```bash
-npm run preview
+```text
+http://localhost:8000
 ```
+
+## Recommended Full App Startup
+
+From the project root:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\run_dev.ps1 -UseRealSdr 1 -RadioCondaPythonPath "C:\Users\Usuario\radioconda\python.exe"
+```
+
+## Main UI Flow
+
+1. Click `Connect USB`.
+2. Click `Start`.
+3. Tune frequency using `Center MHz`, `Span MHz`, `Start MHz`, or `Stop MHz`.
+4. Use `Spectrum Left` and `Spectrum Right` to move across the spectrum without typing a new frequency.
+5. Click the trace to create a marker.
+6. Use `Peak` to mark the strongest visible signal.
 
 ## Project Structure
 
-```
+```text
 src/
- app/                    # Application layer
-    App.tsx            # Main app component
-    router/            # React Router setup
-    services/          # API and WebSocket services
-    store/             # Zustand state management
-    events/            # Event system
- domain/                 # Domain layer
-    models/            # Domain models
-    valueObjects/      # Value objects
- presentation/           # Presentation layer
-    controllers/       # UI controllers
-    hooks/             # Custom React hooks
-    views/             # React components
- shared/                 # Shared utilities
-     constants/         # App constants
-     types/             # TypeScript types
-     utils/             # Utility functions
-     theme/             # Theme configuration
+  app/
+    router/
+    services/
+    store/
+  domain/
+    models/
+    valueObjects/
+  presentation/
+    controllers/
+    hooks/
+    views/
+  shared/
+    constants/
+    types/
+    utils/
 ```
 
-## Architecture
+## Notes
 
-Follows Clean Architecture principles:
-
-- **Presentation Layer**: React components, controllers, hooks
-- **Application Layer**: Use cases, services, state management
-- **Domain Layer**: Business logic, models, value objects
-- **Infrastructure Layer**: API calls, WebSocket connections (in backend)
-
-## Key Components
-
-### Spectrum View
-- Real-time spectrum display with canvas rendering
-- Interactive marker placement
-- Device control buttons
-- Status indicators
-
-### Waterfall View
-- Time-frequency visualization
-- Turbo colormap
-- Frequency and time axis labels
-
-### Recordings View
-- Session management
-- Recording controls (IQ/Audio)
-- File listing and download
-
-### Settings View
-- Comprehensive analyzer configuration
-- Device status display
-- Real-time parameter adjustment
-
-## API Integration
-
-Communicates with the FastAPI backend via:
-
-- **REST API**: Device control, settings, recordings
-- **WebSocket**: Real-time spectrum/waterfall data
-
-## Development Notes
-
-- Uses Zustand for state management
-- Canvas-based rendering for performance
-- Responsive design with Tailwind CSS
-- TypeScript for type safety
-- ESLint for code quality
-
-
-
+- The frontend expects real SDR data from the backend.
+- If the backend returns `real_sdr_error`, the UI should show the device/backend error instead of fake data.
+- If changes are not visible while Vite is running, hard-refresh with `Ctrl+F5` or restart the dev script.

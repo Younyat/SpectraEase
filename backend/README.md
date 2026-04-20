@@ -1,48 +1,104 @@
-﻿# README
-# Spectrum Lab Backend
+# SpectraEase Backend
 
-Backend service for Spectrum Lab.
+FastAPI backend for the SpectraEase RF spectrum analyzer.
 
-## Current status
+The current active hardware path uses a real **Ettus Research USRP-B200** through **UHD/GNU Radio**. The backend starts helper tools with the RadioConda Python executable and returns live spectrum frames captured from the device.
 
-The project structure, core domain entities, DTOs, use cases, controllers, routes, and dependency container are in place.
+## Active Device Flow
 
-The backend currently supports:
+- Driver reported by the API: `uhd_gnuradio`
+- Device currently used: `USRP-B200 from Ettus Research`
+- Capture source: real UHD/GNU Radio samples
+- Default antenna: `RX2`
+- Default center frequency: `89.4 MHz`
+- Default sample rate/span: `2 MS/s`
+- Default gain: `20 dB`
 
-- analyzer settings model
-- device state model
-- spectrum and waterfall entities
-- marker entities
-- session and preset persistence using JSON repositories
-- FastAPI routing skeleton
-- mock SDR adapter
-- initial UHD adapter
-- initial DSP utility modules
+The active API does not generate mock spectrum data. If the device cannot be opened or no frame is available, the spectrum endpoint returns a real SDR error or pending state.
 
-## Run
+## Main Components
 
-```bash
-uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+- `app/infrastructure/web/controllers/device_controller.py`
+  - Connects/disconnects the real SDR flow
+  - Starts/stops live spectrum streaming
+  - Reports device status
 
+- `app/infrastructure/web/controllers/spectrum_controller.py`
+  - Serves live spectrum data
+  - Updates center frequency, span, start/stop, RBW, VBW, reference level, detector mode, and averaging
 
+- `app/infrastructure/sdr/real_spectrum_stream.py`
+  - Manages the persistent spectrum worker process
+  - Restarts the worker when tuning parameters change
 
+- `tools/spectrum_stream_worker.py`
+  - Opens the USRP through GNU Radio/UHD
+  - Captures IQ samples
+  - Produces FFT spectrum frames as JSON
 
+## Run Backend Manually
 
+The recommended development entrypoint is the project script:
 
----
+```powershell
+cd C:\Users\Usuario\Desktop\NICS\Spectum_lab\spectrum-lab
 
-## `backend/app/config/constants.py`
+$env:DEFAULT_CENTER_FREQUENCY_HZ="89400000"
+$env:DEFAULT_SAMPLE_RATE_HZ="2000000"
+$env:DEFAULT_GAIN_DB="20"
+$env:DEFAULT_ANTENNA="RX2"
+$env:UHD_DEVICE_ARGS=""
 
-```python id="96818"
-APP_NAME = "Spectrum Lab"
-DEFAULT_AUDIO_SAMPLE_RATE_HZ = 48_000
-DEFAULT_FFT_SIZE = 4096
-DEFAULT_WATERFALL_HISTORY = 400
+powershell -ExecutionPolicy Bypass -File .\scripts\run_dev.ps1 -UseRealSdr 1 -RadioCondaPythonPath "C:\Users\Usuario\radioconda\python.exe"
+```
 
-SUPPORTED_DETECTOR_MODES = ("sample", "average", "peak", "min")
-SUPPORTED_TRACE_MODES = ("clear_write", "average", "max_hold", "min_hold")
-SUPPORTED_DEMODULATION_MODES = ("off", "am", "fm", "wfm", "usb", "lsb", "cw")
-SUPPORTED_WINDOW_TYPES = ("rectangular", "hann", "hamming", "blackman")
-SUPPORTED_FILTER_TYPES = ("off", "low_pass", "high_pass", "band_pass", "band_stop", "notch")
+If running only the backend, make sure `RADIOCONDA_PYTHON` points to the Python executable that has GNU Radio and UHD:
 
+```powershell
+$env:RADIOCONDA_PYTHON="C:\Users\Usuario\radioconda\python.exe"
+cd backend
+.\venv\Scripts\python.exe -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
 
+## Key API Endpoints
+
+- `GET /api/device/status`
+- `POST /api/device/connect`
+- `POST /api/device/disconnect`
+- `POST /api/device/stream/start`
+- `POST /api/device/stream/stop`
+- `POST /api/device/frequency`
+- `POST /api/device/gain`
+- `GET /api/spectrum/live`
+- `POST /api/spectrum/center-frequency`
+- `POST /api/spectrum/span`
+- `POST /api/spectrum/start-stop`
+- `POST /api/spectrum/rbw`
+- `POST /api/spectrum/vbw`
+- `POST /api/spectrum/reference-level`
+- `POST /api/spectrum/noise-floor-offset`
+- `POST /api/spectrum/detector-mode`
+- `POST /api/spectrum/averaging`
+
+OpenAPI docs are available at `http://localhost:8000/docs` when the backend is running.
+
+## Runtime Configuration
+
+| Variable | Purpose |
+|----------|---------|
+| `RADIOCONDA_PYTHON` | Python executable with GNU Radio/UHD |
+| `DEFAULT_CENTER_FREQUENCY_HZ` | Startup center frequency |
+| `DEFAULT_SAMPLE_RATE_HZ` | Startup sample rate/span |
+| `DEFAULT_GAIN_DB` | Startup gain |
+| `DEFAULT_ANTENNA` | UHD antenna name |
+| `UHD_DEVICE_ARGS` | Optional UHD device selector |
+| `REAL_SDR_FPS` | Spectrum worker frame rate |
+
+## Troubleshooting
+
+- Confirm the USRP-B200 is connected over USB.
+- Confirm RadioConda can import `gnuradio` and `uhd`.
+- Confirm the app was started with `-UseRealSdr 1`.
+- Confirm `RADIOCONDA_PYTHON` points to `C:\Users\Usuario\radioconda\python.exe`.
+- If `/api/spectrum/live` returns `real_sdr_pending`, wait for the first frame.
+- If it returns `real_sdr_error`, check the error field and the backend terminal output.
